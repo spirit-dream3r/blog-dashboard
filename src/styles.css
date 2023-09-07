@@ -1,5 +1,6 @@
 @import "~bootstrap/dist/css/bootstrap.min.css";
 @import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+@use "@material/snackbar/mdc-snackbar";
 
 :root {
   --primary-color: #026467;
@@ -57,3 +58,6 @@ input[type="email"] {
   width: 100%;
 }
 
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

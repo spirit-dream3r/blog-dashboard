@@ -1,8 +1,10 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
-import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import {MatSnackBarModule, MatSnackBarRef} from '@angular/material/snack-bar';
+
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -11,6 +13,8 @@ import { FooterComponent } from './layouts/footer/footer.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { CategoryComponent } from './category/category.component';
 import { FormsModule } from '@angular/forms';
+import { environment } from 'src/environments/environment';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -18,24 +22,17 @@ import { FormsModule } from '@angular/forms';
     HeaderComponent,
     FooterComponent,
     DashboardComponent,
-
     CategoryComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    provideFirebaseApp(() =>
-      initializeApp({
-        apiKey: 'AIzaSyAxMaTCrBGfDCMLDMpsoSnqF956INjypZU',
-        authDomain: 'angular-blog-ede11.firebaseapp.com',
-        projectId: 'angular-blog-ede11',
-        storageBucket: 'angular-blog-ede11.appspot.com',
-        messagingSenderId: '346158799048',
-        appId: '1:346158799048:web:b6213e78a974d040546dfd',
-      })
-    ),
-    provideFirestore(() => getFirestore()),
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule,
+    BrowserAnimationsModule,
+    MatSnackBarModule,
+    
   ],
   providers: [],
   bootstrap: [AppComponent],

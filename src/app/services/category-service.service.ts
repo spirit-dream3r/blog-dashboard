@@ -1,25 +1,34 @@
-import { Injectable } from '@angular/core';
-import { Firestore } from '@angular/fire/firestore';
-import firebase from  'firebase/compat/app';
-import {addDoc, collection, getFirestore} from 'firebase/firestore';
+import { Injectable, inject } from '@angular/core';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
+import { Category } from '../models/category.interface';
+import {MatSnackBar, MatSnackBarRef, MatSnackBarModule} from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CategoryService {
 
-  constructor() { }
+  private dbPath = '/Categories'
+  categoriesRef: AngularFirestoreCollection<Category>
 
-  async createCategory(db: any){
-    try {
-      const docRef = await addDoc(collection(db, "categories"), {
-        first: "Ada",
-        last: "Lovelace",
-        born: 1815
-      });
-      console.log("Document written with ID: ", docRef.id);
-    } catch (e) {
-      console.error("Error adding document: ", e);
-    }
+
+  constructor(private db: AngularFirestore, private _snackBar: MatSnackBar) {
+    this.categoriesRef = db.collection(this.dbPath);
+   }
+
+   getAll(): AngularFirestoreCollection<Category> {
+    return this.categoriesRef;
+  }
+
+  create(category: Category): any {
+    return this.categoriesRef.add({ ...category });
+  }
+
+  saveData(data){
+    this.db.collection(this.dbPath).add(data).then(docRef =>{
+      //console.log(docRef)
+      this._snackBar.open('Successfully added!')
+    })
+    .catch(err => console.log(err))
   }
 }

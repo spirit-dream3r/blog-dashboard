@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "angular-blog-ede11"
+  },
+  "targets": {
+    "angular-blog-ede11": {
+      "hosting": {
+        "blog-dashboard": [
+          "blog-dashboard-2023imp"
+        ]
+      }
+    }
   }
 }
