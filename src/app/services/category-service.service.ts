@@ -13,6 +13,7 @@ export class CategoryService {
   private dbPath = '/Categories';
   categoriesRef: AngularFirestoreCollection<Category>;
   categories?: Category[];
+  
 
   constructor(private db: AngularFirestore) {
     this.categoriesRef = db.collection(this.dbPath);
@@ -46,5 +47,9 @@ export class CategoryService {
 
   delete(id: string):Promise<void>{
     return this.categoriesRef.doc(id).delete();
+  }
+
+  updateData(id, editData){
+    this.db.collection(this.dbPath).doc(id).update(editData);
   }
 }

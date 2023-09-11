@@ -14,6 +14,8 @@ export class CategoryComponent implements OnInit {
   categoryArray: Array<any>;
   isDisabled: boolean = true;
   formCategory: string;
+  formStatus: string = 'Add';
+  categoryId: string;
 
   categoryService: CategoryService = inject(CategoryService);
   _snackBar = inject(MatSnackBar);
@@ -29,14 +31,18 @@ export class CategoryComponent implements OnInit {
     let categoryData: Category = {
       category: formData.value.category,
     };
+    if(this.formStatus === 'Add'){
+      this.categoryService.saveData(categoryData);
+      formData.reset();
+  
+      this._snackBar.open(
+        'Successfully added!' + ' ' + categoryData.category,
+        'x'
+      );
+    } else if (this.formStatus === 'Edit'){
+      this.categoryService.updateData(this.categoryId, categoryData)
+    }
 
-    this.categoryService.saveData(categoryData);
-    formData.reset();
-    this.isDisabled ? formData.value.category === '' : false;
-    this._snackBar.open(
-      'Successfully added!' + ' ' + categoryData.category,
-      'x'
-    );
   }
 
   onDelete(id: string) {
@@ -45,7 +51,10 @@ export class CategoryComponent implements OnInit {
     });
   }
 
-  onEdit(category) {
+  onEdit(category, id) {
     this.formCategory = category;
+    this.formStatus = 'Edit';
+    this.categoryId = id;
+
   }
 }
