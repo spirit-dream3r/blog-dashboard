@@ -1,44 +1,51 @@
-import { Component, inject } from '@angular/core';
-import { map } from 'rxjs';
+import { Component, OnInit, inject } from '@angular/core';
+import { Observable, map } from 'rxjs';
 import { CategoryService } from '../services/category-service.service';
 import { Category } from '../models/category.interface';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-category',
   templateUrl: './category.component.html',
   styleUrls: ['./category.component.css'],
 })
-export class CategoryComponent {
-  categories?: Category[];
+export class CategoryComponent implements OnInit {
+  categoryArray: Array<any>;
+  isDisabled: boolean = true;
+  formCategory: string;
 
   categoryService: CategoryService = inject(CategoryService);
+  _snackBar = inject(MatSnackBar);
 
-  constructor() {
-    this.retrieveCategories();
+  ngOnInit(): void {
+    this.categoryService.getAll().subscribe((val) => {
+      console.log(val);
+      this.categoryArray = val;
+    });
   }
 
   onSubmit(formData: any): void {
     let categoryData: Category = {
       category: formData.value.category,
     };
+
     this.categoryService.saveData(categoryData);
+    formData.reset();
+    this.isDisabled ? formData.value.category === '' : false;
+    this._snackBar.open(
+      'Successfully added!' + ' ' + categoryData.category,
+      'x'
+    );
   }
 
-  retrieveCategories(): void {
-    this.categoryService
-      .getAll()
-      .snapshotChanges()
-      .pipe(
-        map((changes) =>
-          changes.map((c) => ({
-            id: c.payload.doc['id'],
-            ...c.payload.doc.data(),
-          }))
-        )
-      )
-      .subscribe((data) => {
-        this.categories = data;
-        console.log(this.categories);
-      });
+  onDelete(id: string) {
+    this.categoryService.delete(id).then(() => {
+      this._snackBar.open('Successfully deleted', 'X');
+    });
+  }
+
+  onEdit(category) {
+    this.formCategory = category;
   }
 }
