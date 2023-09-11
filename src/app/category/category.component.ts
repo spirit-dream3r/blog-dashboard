@@ -31,19 +31,17 @@ export class CategoryComponent implements OnInit {
     let categoryData: Category = {
       category: formData.value.category,
     };
-    if(this.formStatus === 'Add'){
+    if (this.formStatus === 'Add') {
       this.categoryService.saveData(categoryData);
-      formData.reset();
-  
-     
-    } else if (this.formStatus === 'Edit'){
-      this.categoryService.updateData(this.categoryId, categoryData)
+    } else if (this.formStatus === 'Edit') {
+      this.categoryService.updateData(this.categoryId, categoryData);
     }
     this._snackBar.open(
       'Successfully ' + this.formStatus + 'ed ' + categoryData.category,
       'x'
     );
-
+    formData.reset();
+    this.formStatus = 'Add';
   }
 
   onDelete(id: string) {
@@ -56,6 +54,5 @@ export class CategoryComponent implements OnInit {
     this.formCategory = category;
     this.formStatus = 'Edit';
     this.categoryId = id;
-
   }
 }
