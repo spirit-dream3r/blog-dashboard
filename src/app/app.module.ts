@@ -16,6 +16,8 @@ import { CategoryComponent } from './category/category.component';
 import { environment } from 'src/environments/environment';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SnackShowComponent } from './snack-show/snack-show.component';
+import { AllPostsComponent } from './posts/all-posts/all-posts.component';
+import { NewPostComponent } from './posts/new-post/new-post.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +27,8 @@ import { SnackShowComponent } from './snack-show/snack-show.component';
     DashboardComponent,
     CategoryComponent,
     SnackShowComponent,
+    AllPostsComponent,
+    NewPostComponent,
   ],
   imports: [
     BrowserModule,
