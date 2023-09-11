@@ -35,13 +35,14 @@ export class CategoryComponent implements OnInit {
       this.categoryService.saveData(categoryData);
       formData.reset();
   
-      this._snackBar.open(
-        'Successfully added!' + ' ' + categoryData.category,
-        'x'
-      );
+     
     } else if (this.formStatus === 'Edit'){
       this.categoryService.updateData(this.categoryId, categoryData)
     }
+    this._snackBar.open(
+      'Successfully ' + this.formStatus + 'ed ' + categoryData.category,
+      'x'
+    );
 
   }
 
