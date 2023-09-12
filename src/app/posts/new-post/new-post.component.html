@@ -6,7 +6,7 @@
     </div>
   </div>
 
-  <form [formGroup]="postForm">
+  <form [formGroup]="postForm" (ngSubmit)="onSubmit()">
     <div class="row">
       <div class="col-md-7">
         <div class="card shadow-effect">
@@ -19,7 +19,7 @@
                 (keyup)="onTitleChanged($event)"
                 formControlName="title"
                 [ngClass]="{
-                  'is-invalid': 'fc.title.touched && fc.title.invalid'
+                  'is-invalid': fc.title.touched && fc.title.invalid
                 }"
               />
             </div>
@@ -43,10 +43,14 @@
               <label>Permalink</label>
               <input
                 type="text"
+                [disabled]="true"
+
                 class="form-control"
                 [(ngModel)]="permalink"
-                name="permalink"
                 formControlName="permalink"
+                [ngClass]="{
+                  'is-invalid': fc.permalink.touched && fc.permalink.invalid
+                }"
               />
               <div *ngIf="fc.permalink.errors?.required">
                 <div
@@ -64,6 +68,9 @@
                 rows="10"
                 class="form-control"
                 formControlName="excerpt"
+                [ngClass]="{
+                  'is-invalid': fc.excerpt.touched && fc.excerpt.invalid
+                }"
               ></textarea>
               <div *ngIf="fc.excerpt.errors?.required">
                 <div
@@ -76,7 +83,7 @@
               <div *ngIf="fc.excerpt.errors?.minlength">
                 <div
                   excerpt
-                  *ngIf="fc.excerpt.touched && fc.title.invalid"
+                  *ngIf="fc.excerpt.touched && fc.excerpt.invalid"
                   class="alert alert-danger"
                 >
                   Excerpt should contain at least 20 letters
@@ -89,29 +96,24 @@
       <div class="col-md-5 shadow-effect">
         <div class="form-group">
           <label class="pt-3">Please select a post category</label>
-          <select class="form-control" formControlName="category">
+          <select
+            class="form-control"
+            formControlName="category"
+          
+          >
             <option value="" disabled>Please select a category</option>
-            <option value="" *ngFor="let category of categories">
+            <option value="" *ngFor="let category of categories" value="{{category.id}}-{{category.data.category}}">
               {{ category.data.category }}
             </option>
           </select>
           <div *ngIf="fc.category.errors?.required">
-            <div
-              *ngIf="fc.category.touched && fc.category.invalid"
-              class="alert alert-danger"
-            >
-              Title is required
-            </div>
+            <div *ngIf='fc.category.touched && fc.category.invalid' class="alert alert-danger">Please select a post category</div>
           </div>
         </div>
 
         <div class="form-group">
           <label for="">Post Image</label>
-          <img
-            [src]="imgSrc"
-            class="form-control img-fluid img-preview mb-2"
-            alt=""
-          />
+          <img [src]="imgSrc" class="form-control img-fluid img-preview mb-2" />
           <input
             type="file"
             name=""
@@ -120,21 +122,42 @@
             accept="image/*"
             (change)="showPreview($event)"
             formControlName="postImg"
+            [ngClass]="{
+              'is-invalid': fc.postImg.touched && fc.postImg.invalid
+            }"
           />
+          <div *ngIf="fc.postImg.errors?.required">
+            <div
+              *ngIf="fc.postImg.touched && fc.postImg.invalid"
+              class="alert alert-danger"
+            >
+              Please select image
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <div class="col-md-12 shadow-effect">
+    <div class="col-md-12 shadow-effect mt-2 ">
       <div class="form-group">
         <label for="">Content</label>
         <angular-editor
           placeholder="Add your content here"
           formControlName="content"
         ></angular-editor>
+        <div *ngIf="fc.content.errors?.required">
+          <div
+            *ngIf="fc.content.touched && fc.content.invalid"
+            class="alert alert-danger"
+          >
+            Content is required
+          </div>
+        </div>
       </div>
     </div>
     <div class="col-nd-12 text-center mb-5 mt-5">
-      <button class="btn btn-info bg-theme">Save post</button>
+      <button class="btn btn-info bg-theme">
+        Save post
+      </button>
       <button class="btn btn-warning ml-2" routerLink="/posts">Go back</button>
     </div>
   </form>
