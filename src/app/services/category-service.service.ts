@@ -10,18 +10,19 @@ import { map } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class CategoryService {
-  private dbPath = '/Categories';
+  private categoriesPath = '/Categories';
+
   categoriesRef: AngularFirestoreCollection<Category>;
   categories?: Category[];
   
 
   constructor(private db: AngularFirestore) {
-    this.categoriesRef = db.collection(this.dbPath);
+    this.categoriesRef = db.collection(this.categoriesPath);
   }
 
   getAll() {
     return this.db
-      .collection(this.dbPath)
+      .collection(this.categoriesPath)
       .snapshotChanges()
       .pipe(
         map((changes) => {
@@ -40,7 +41,7 @@ export class CategoryService {
 
   saveData(data: any) {
     this.db
-      .collection(this.dbPath)
+      .collection(this.categoriesPath)
       .add(data)
       .catch((err) => console.log(err));
   }
@@ -50,6 +51,6 @@ export class CategoryService {
   }
 
   updateData(id, editData){
-    this.db.collection(this.dbPath).doc(id).update(editData);
+    this.db.collection(this.categoriesPath).doc(id).update(editData);
   }
 }
